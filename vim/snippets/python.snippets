@@ -11,7 +11,7 @@ snippet mod
 
 		${2:Description goes here...}
 	
-		:copyright: (c) `strftime('%Y')` by the ${3:Project Name} Team, see AUTHORS for more details.
+		:copyright: (c) `strftime('%Y')` by ${3:Openlabs Technologies & Consulting (P) Limited}
 		:license: ${4:BSD}, see LICENSE for more details.
 	"""
 	${5}
@@ -53,3 +53,22 @@ snippet main
 		main(sys.argv[1:])
 snippet _
 	__${1:init}__${2}
+snippet __tryton
+	# -*- coding: utf-8 -*-
+	{
+	    "name" : "${1:Module Name}",
+	    "version" : "${2:0.0.1}",
+	    "author" : "${3:Openlabs Technologies & Consulting (P) Limited}",
+	    'email': '${4:info@openlabs.co.in}',
+	    'website': '${5:http://www.openlabs.co.in/}',
+	    "category" : "${6:Generic}",
+	    "description": "${7:Description}",
+	    "depends" : [
+	    	"${8:module}"
+	    ],
+	    "xml" : [
+	    	${9:".xml"}
+	    ],
+	    'translation': [
+	    ],
+	}
