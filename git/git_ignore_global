@@ -1,0 +1,13 @@
+*~
+*.swp
+
+# Python cache files
+*.pyc
+
+# Rietveld code review upload file
+upload.py
+
+# Directories
+build/
+dist/
+*.egg-info/
