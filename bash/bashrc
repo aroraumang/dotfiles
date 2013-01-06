@@ -14,10 +14,17 @@ if [ `id -u` == '0' ]; then
 else
   MITSUHIKOS_USER_COLOR=$MITSUHIKOS_PINK_COLOR
 fi
-MITSUHIKOS_VCPROMPT_EXECUTABLE=~/workspace/vcprompt/vcprompt
+
+MITSUHIKOS_VC_PROMPT=$' on \033[34m%n\033[00m:\033[00m%[unknown]b\033[32m'
+MITSUHIKOS_VC_PROMPT_EX="$MITSUHIKOS_VC_PROMPT%m%u"
 
 mitsuhikos_vcprompt() {
-  $MITSUHIKOS_VCPROMPT_EXECUTABLE -f " %n:%b R-%r %u %m"
+  path=`pwd`
+  prompt="$MITSUHIKOS_VC_PROMPT"
+  if [[ "$path" != /Users/sharoonthomas/Development/playfire* ]]; then
+    prompt="$MITSUHIKOS_VC_PROMPT_EX"
+  fi
+  vcprompt -f "$prompt"
 }
 
 mitsuhikos_lastcommandfailed() {
@@ -45,8 +52,14 @@ mitsuhikos_backgroundjobs() {
 
 mitsuhikos_virtualenv() {
   if [ x$VIRTUAL_ENV != x ]; then
+    if [[ $VIRTUAL_ENV == *.virtualenvs/* ]]; then
+      ENV_NAME=`basename "${VIRTUAL_ENV}"`
+    else
+      folder=`dirname "${VIRTUAL_ENV}"`
+      ENV_NAME=`basename "$folder"`
+    fi
     echo -n $' \033[37mworkon \033[31m'
-    basename "${VIRTUAL_ENV}"
+    echo -n $ENV_NAME
     echo -n $'\033[00m'
   fi
 }
@@ -59,7 +72,7 @@ export MITSUHIKOS_BASEPROMPT='\n\e${MITSUHIKOS_USER_COLOR}\u \
 `mitsuhikos_backgroundjobs`\
 `mitsuhikos_virtualenv`\
 \e${MITSUHIKOS_DEFAULT_COLOR}'
-export PS1="${MITSUHIKOS_BASEPROMPT}
+export PS1="\[\033[G\]${MITSUHIKOS_BASEPROMPT}
 $ "
 
 export TERM=xterm-color
@@ -68,6 +81,7 @@ export CLICOLOR=1
 if [ `uname` == "Darwin" ]; then
   export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
   export LC_CTYPE=en_US.utf-8
+  export LC_ALL=en_US.utf-8
 else
   alias ls='ls --color=auto'
 fi
@@ -93,7 +107,7 @@ import sys
 from subprocess import Popen, call, PIPE
 
 old_location = None
-out = Popen(['scselect'], stdout=PIPE, stderr=PIPE).communicate()[1]
+out = Popen(['scselect'], stdout=PIPE, stderr=PIPE).communicate()[0]
 for line in out.splitlines():
     line = line.strip()
     if line.startswith('*'):
@@ -118,6 +132,9 @@ except (KeyboardInterrupt, EOFError):
 SWITCH
 }
 
+if [ x`which hub` != x ]; then
+  alias git=hub
+fi
 alias mq='hg -R $(hg root)/.hg/patches'
 alias rvim="gvim --remote-silent"
 alias pypy-jitlog="PYPYLOG=jit-log-opt,jit-backend-counts:pypyjitlog.log pypy-c"
@@ -145,3 +162,6 @@ stty werase undef
 bind '"\C-w": unix-filename-rubout'
 
 alias rm='rm -i'
+if [ x`which ack-grep` != x ]; then
+  alias ack=ack-grep
+fi
