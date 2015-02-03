@@ -1,6 +1,6 @@
 [user]
-	name = Armin Ronacher
-	email = armin.ronacher@active-4.com
+	name = Umang Arora
+	email = umang.arora@openlabs.co.in
 [core]
 	excludesfile = ~/.gitignore
 	autocrlf = input
